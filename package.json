@@ -3,11 +3,11 @@
   "version": "0.0.1",
   "description": "Decode runes",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "prepare": "npm run build"
   },
-  "types": "dist/types",
   "author": "Aaron Barnard",
   "license": "MIT",
   "devDependencies": {
