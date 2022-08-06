@@ -4,37 +4,37 @@ import { binaryHashToHex, operatorToDescription, runeOperatorRegex } from './uti
 export * from './types'
 
 export const decode = (rune: string) => {
-	const runeBinary = Base64Binary.decode(rune)
-	const hashBinary = runeBinary.slice(0, 32)
-	const hash = binaryHashToHex(hashBinary)
-	const restBinary = runeBinary.slice(32)
+  const runeBinary = Base64Binary.decode(rune)
+  const hashBinary = runeBinary.slice(0, 32)
+  const hash = binaryHashToHex(hashBinary)
+  const restBinary = runeBinary.slice(32)
 
-	const [uniqueId, ...restrictionStrings] = new TextDecoder().decode(restBinary).split('&')
+  const [uniqueId, ...restrictionStrings] = new TextDecoder().decode(restBinary).split('&')
 
-	const id = uniqueId.split('=')[1]
+  const id = uniqueId.split('=')[1]
 
-	const restrictions = restrictionStrings.map((restriction) => {
-		const alternatives = restriction.split('|')
+  const restrictions = restrictionStrings.map((restriction) => {
+    const alternatives = restriction.split('|')
 
-		const summary = alternatives.reduce((str, alternative) => {
-			const [operator] = alternative.match(runeOperatorRegex) || []
+    const summary = alternatives.reduce((str, alternative) => {
+      const [operator] = alternative.match(runeOperatorRegex) || []
 
-			if (!operator) return str
+      if (!operator) return str
 
-			const [name, value] = alternative.split(operator)
+      const [name, value] = alternative.split(operator)
 
-			return `${str ? `${str} OR ` : ''}${name} ${operatorToDescription(operator)} ${value}`
-		}, '')
+      return `${str ? `${str} OR ` : ''}${name} ${operatorToDescription(operator)} ${value}`
+    }, '')
 
-		return {
-			alternatives,
-			summary
-		}
-	})
+    return {
+      alternatives,
+      summary
+    }
+  })
 
-	return {
-		id,
-		hash,
-		restrictions
-	}
+  return {
+    id,
+    hash,
+    restrictions
+  }
 }
