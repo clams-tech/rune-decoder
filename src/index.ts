@@ -1,9 +1,10 @@
 import { Base64Binary } from './base64'
-import { binaryHashToHex, operatorToDescription, runeOperatorRegex } from './utils'
+import { binaryHashToHex, invalidAscii, operatorToDescription, runeOperatorRegex } from './utils'
+import type { DecodedRune } from './types'
 
 export * from './types'
 
-export const decode = (rune: string) => {
+export const decode = (rune: string): DecodedRune | null => {
   const runeBinary = Base64Binary.decode(rune)
   const hashBinary = runeBinary.slice(0, 32)
   const hash = binaryHashToHex(hashBinary)
@@ -13,12 +14,15 @@ export const decode = (rune: string) => {
 
   const id = uniqueId.split('=')[1]
 
+  // invalid rune checks
+  if (!id) return null
+  if (restrictionStrings.some(invalidAscii)) return null
+
   const restrictions = restrictionStrings.map((restriction) => {
     const alternatives = restriction.split('|')
 
     const summary = alternatives.reduce((str, alternative) => {
       const [operator] = alternative.match(runeOperatorRegex) || []
-
       if (!operator) return str
 
       const [name, value] = alternative.split(operator)

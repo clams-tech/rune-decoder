@@ -38,3 +38,6 @@ export const operatorToDescription = (operator: string): string => {
       return ''
   }
 }
+
+export const invalidAscii = (str: string): boolean =>
+  !![...str].some((char) => char.charCodeAt(0) > 127)
