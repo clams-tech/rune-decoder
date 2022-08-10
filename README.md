@@ -2,6 +2,8 @@
 
 A simple JavaScript libary for decoding [runes](https://github.com/rustyrussell/runes).
 
+**Still in Beta and may have some bugs and may have breaking API changes in future**
+
 ## Install
 
 Install directly from the repo:
@@ -43,3 +45,5 @@ console.log(decoded)
 //   ]
 // }
 ```
+
+If a rune is invalid, `null` will be returned.
